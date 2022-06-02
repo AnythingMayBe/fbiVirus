@@ -3,6 +3,7 @@ import time
 import random
 import os
 import requests
+import threading
 
 class Virus:
     def __init__(self):
@@ -20,7 +21,12 @@ class Virus:
             with open(self.config["audioPath"], "wb") as file:
                 file.write(r.content)
                 file.close()
+            threading.Thread(target=self.deleteFile).start() # Delete the file for preventing any problems (for example if the user run this script in their Desktop)
             playsound(self.config["audioPath"])
+
+    def deleteFile(self):
+        time.sleep(0.1)
+        os.remove(self.config["audioPath"])
 
     def waitBeforeEaring(self):
         time.sleep(random.randint(self.config["minTimeToWait"], self.config["minTimeToWait"]))
